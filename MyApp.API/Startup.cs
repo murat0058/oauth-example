@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Http;
+﻿using System.Web.Http;
+using System.Web.Http.Cors;
 using Microsoft.Owin;
 using Owin;
 
@@ -15,6 +14,10 @@ namespace MyApp.API
             var config = new HttpConfiguration();
 
             config.MapHttpAttributeRoutes();
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+
+            // Use camelCase JSON
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
 
             app.UseWebApi(config);
         }
