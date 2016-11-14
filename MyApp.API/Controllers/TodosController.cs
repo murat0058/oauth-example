@@ -10,7 +10,10 @@ namespace MyApp.API.Controllers
     [RoutePrefix("api/todos")]
     public class TodosController : ApiController
     {
-        private static readonly List<Todo> _todos = new List<Todo>();
+        private static readonly List<Todo> _todos = new List<Todo> {
+            new Todo { Id = Guid.NewGuid(), Title = "First todo item" },
+            new Todo { Id = Guid.NewGuid(), Title = "Second todo item" }
+        };
 
         [Route]
         public IHttpActionResult Get()
