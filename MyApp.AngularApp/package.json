@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "tsc && npm install && npm run build && \"dotnet run\" ",
-    "startWebpackDevServer": "webpack-dev-server --inline --progress --port 8080",
+    "startWebpackDevServer": "webpack-dev-server --inline --progress --port 5000",
     "build": "SET NODE_ENV=development && webpack -d --color && dotnet run",
     "build:prod": "SET NODE_ENV=production && webpack -d --color",
     "lint": "tslint ./src/**/*.ts -t verbose",
@@ -17,7 +17,8 @@
     "angular": "1.5.8",
     "angular-ui-router": "0.3.2",
     "bootstrap": "3.3.7",
-    "typescript": "2.0.9"
+    "typescript": "2.0.9",
+    "oidc-client": "1.2.1-beta.4"
   },
   "devDependencies": {
     "css-loader": "0.25.0",
@@ -27,6 +28,7 @@
     "less-loader": "2.2.3",
     "style-loader": "0.13.1",
     "ts-loader": "1.2.0",
+    "script-loader": "0.7.0",
     "url-loader": "0.5.7",
     "tslint": "3.15.1",
     "typings": "2.0.0",

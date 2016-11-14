@@ -1,27 +1,29 @@
 "use strict";
-var todo_service_1 = require('./todo.service');
+var auth_service_1 = require('../auth/auth.service');
 var AppController = (function () {
-    function AppController(todoService) {
-        this.todoService = todoService;
+    function AppController(authService) {
+        this.authService = authService;
         this.title = 'Todo App';
     }
-    AppController.prototype.$onInit = function () {
-        this.getTodoItems();
+    AppController.prototype.login = function () {
+        this.authService.startSigninMainWindow();
     };
-    AppController.prototype.getTodoItems = function () {
-        var _this = this;
-        this.todoService.getTodoItems()
-            .then(function (data) {
-            _this.todoItems = data;
-        });
+    AppController.prototype.loginCallback = function () {
+        this.authService.endSigninMainWindow();
     };
-    AppController.$inject = [todo_service_1.TodoService.iid];
+    AppController.prototype.logout = function () {
+        this.authService.startSignoutMainWindow();
+    };
+    AppController.prototype.isAuthenticated = function () {
+        return this.authService.isAuthenticated();
+    };
+    AppController.$inject = [auth_service_1.AuthService.iid];
     return AppController;
 }());
 exports.AppController = AppController;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     controller: AppController,
-    template: "<div class=\"container\">\n    <div class=\"row\">\n        <h1>{{$ctrl.title}}</h1>\n        <br/>\n        <table class=\"table table-bordered\">\n            <tr>\n                <th>Title</th>\n                <th>Completed?</th>\n            </tr>\n            <tr ng-repeat=\"item in $ctrl.todoItems\">\n                <td>{{item.title}}</td>\n                <td><i ng-show=\"item.isCompleted\" class=\"glyphicon glyphicon-ok\"></i></td>\n            </tr>\n        </table>\n    </div>\n</div>"
+    template: "<div class=\"container\">\n    <div class=\"row\">\n        <h1>{{$ctrl.title}}</h1>\n        <a ng-if=\"!$ctrl.isAuthenticated()\" ng-click=\"$ctrl.login()\">Log in</a>\n        <a ng-if=\"$ctrl.isAuthenticated()\" ng-click=\"$ctrl.logout()\">Log out</a>\n  \n        <br/>\n        <div ui-view></div>\n    </div>\n</div>"
 };
 //# sourceMappingURL=root.component.js.map

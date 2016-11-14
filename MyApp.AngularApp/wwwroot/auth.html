@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MyApp Auth</title>
+</head>
+<body>
+    <script src="oidc-client.min.js"></script>
+    <script>
+        new Oidc.UserManager().signinRedirectCallback().then(function () {
+            window.location.href = "/";
+        });
+    </script>
+</body>
+</html>

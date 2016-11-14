@@ -10,8 +10,7 @@ function routeConfig($stateProvider: ng.ui.IStateProvider, $urlRouterProvider: n
         .state('app.home', {
             url: '/home',
             template: '<app-home></app-home>'
-        })
-
+        });
 }
 
 export default routeConfig;

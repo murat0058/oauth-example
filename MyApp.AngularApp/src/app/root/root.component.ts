@@ -1,21 +1,26 @@
-﻿import {TodoService} from './todo.service';
+﻿import {AuthService} from '../auth/auth.service';
 
 export class AppController {
     private title = 'Todo App';
     private todoItems: any;
     
-    static $inject = [TodoService.iid];
-    constructor(private todoService: TodoService) { }
+    static $inject = [AuthService.iid];
+    constructor(private authService: AuthService) { }
 
-    $onInit() {
-        this.getTodoItems();
+    login() {
+        this.authService.startSigninMainWindow();
     }
 
-    getTodoItems() {
-        this.todoService.getTodoItems()
-            .then((data) => {
-                this.todoItems = data;
-            });
+    loginCallback() {
+        this.authService.endSigninMainWindow();
+    }
+
+    logout() {
+        this.authService.startSignoutMainWindow();
+    }
+
+    isAuthenticated() {
+        return this.authService.isAuthenticated();
     }
 }
 
@@ -24,17 +29,11 @@ export default {
     template: `<div class="container">
     <div class="row">
         <h1>{{$ctrl.title}}</h1>
+        <a ng-if="!$ctrl.isAuthenticated()" ng-click="$ctrl.login()">Log in</a>
+        <a ng-if="$ctrl.isAuthenticated()" ng-click="$ctrl.logout()">Log out</a>
+  
         <br/>
-        <table class="table table-bordered">
-            <tr>
-                <th>Title</th>
-                <th>Completed?</th>
-            </tr>
-            <tr ng-repeat="item in $ctrl.todoItems">
-                <td>{{item.title}}</td>
-                <td><i ng-show="item.isCompleted" class="glyphicon glyphicon-ok"></i></td>
-            </tr>
-        </table>
+        <div ui-view></div>
     </div>
 </div>`
 };
