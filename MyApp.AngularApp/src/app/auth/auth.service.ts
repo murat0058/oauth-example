@@ -6,7 +6,7 @@ const settings: any = {
     redirect_uri: 'http://localhost:5000/auth.html',
     post_logout_redirect_uri: 'http://localhost:5000/',
     response_type: 'id_token token',
-    scope: 'openid profile email myapp-api',
+    scope: 'openid profile email myapp-api roles',
 
     silent_redirect_uri: 'http://localhost:5000',
     automaticSilentRenew: true,
@@ -20,6 +20,7 @@ export class AuthService {
 
     private loggedIn: boolean = false;
     private user: User;
+    private accessToken: string = undefined;
 
     private userManager = new UserManager(settings);
 
@@ -37,6 +38,7 @@ export class AuthService {
                     this.$rootScope.$apply(() => {
                         this.loggedIn = false;
                         this.user = undefined;
+                        this.accessToken = undefined;
                     });
                 }
             })
@@ -44,6 +46,7 @@ export class AuthService {
                 this.$rootScope.$apply(() => {
                     this.loggedIn = false;
                     this.user = undefined;
+                    this.accessToken = undefined;
                 });
             });
 
@@ -51,6 +54,7 @@ export class AuthService {
             this.$rootScope.$apply(() => {
                 this.loggedIn = false;
                 this.user = undefined;
+                this.accessToken = undefined;
             });
         });
     }
@@ -75,8 +79,12 @@ export class AuthService {
     }
 
     getToken() {
-        var user = this.getUser();
-        return user.token_type + ' ' + user.access_token;
+        if (this.accessToken === undefined) {
+            var user = this.getUser();
+            this.accessToken = user.access_token;
+        }
+
+        return `Bearer ${this.accessToken}`;
     }
 
     startSignoutMainWindow() {

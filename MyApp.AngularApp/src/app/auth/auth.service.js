@@ -6,7 +6,7 @@ var settings = {
     redirect_uri: 'http://localhost:5000/auth.html',
     post_logout_redirect_uri: 'http://localhost:5000/',
     response_type: 'id_token token',
-    scope: 'openid profile email myapp-api',
+    scope: 'openid profile email myapp-api roles',
     silent_redirect_uri: 'http://localhost:5000',
     automaticSilentRenew: true,
     filterProtocolClaims: true,
@@ -18,6 +18,7 @@ var AuthService = (function () {
         this.$rootScope = $rootScope;
         this.$state = $state;
         this.loggedIn = false;
+        this.accessToken = undefined;
         this.userManager = new oidc_client_1.UserManager(settings);
         this.userManager.getUser()
             .then(function (user) {
@@ -31,6 +32,7 @@ var AuthService = (function () {
                 _this.$rootScope.$apply(function () {
                     _this.loggedIn = false;
                     _this.user = undefined;
+                    _this.accessToken = undefined;
                 });
             }
         })
@@ -38,12 +40,14 @@ var AuthService = (function () {
             _this.$rootScope.$apply(function () {
                 _this.loggedIn = false;
                 _this.user = undefined;
+                _this.accessToken = undefined;
             });
         });
         this.userManager.events.addUserUnloaded(function (e) {
             _this.$rootScope.$apply(function () {
                 _this.loggedIn = false;
                 _this.user = undefined;
+                _this.accessToken = undefined;
             });
         });
     }
@@ -65,8 +69,11 @@ var AuthService = (function () {
         return this.user;
     };
     AuthService.prototype.getToken = function () {
-        var user = this.getUser();
-        return user.token_type + ' ' + user.access_token;
+        if (this.accessToken === undefined) {
+            var user = this.getUser();
+            this.accessToken = user.access_token;
+        }
+        return "Bearer " + this.accessToken;
     };
     AuthService.prototype.startSignoutMainWindow = function () {
         this.userManager.signoutRedirect();

@@ -36916,7 +36916,7 @@
 	    redirect_uri: 'http://localhost:5000/auth.html',
 	    post_logout_redirect_uri: 'http://localhost:5000/',
 	    response_type: 'id_token token',
-	    scope: 'openid profile email myapp-api',
+	    scope: 'openid profile email myapp-api roles',
 	    silent_redirect_uri: 'http://localhost:5000',
 	    automaticSilentRenew: true,
 	    filterProtocolClaims: true,
@@ -36976,6 +36976,7 @@
 	    };
 	    AuthService.prototype.getToken = function () {
 	        var user = this.getUser();
+	        debugger;
 	        return user.token_type + ' ' + user.access_token;
 	    };
 	    AuthService.prototype.startSignoutMainWindow = function () {
